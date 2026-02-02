@@ -29,5 +29,7 @@ theta = 0.0
 sigma = rets.std() * np.sqrt(252)
 
 ou = OU(X0=X.iloc[-1],kappa=kappa,theta=theta,sigma=sigma,dt=dt)
+ou_gmm = OU_GMM(dt=dt, verbose=True)
+ou_gmm.fit(X.values)
 ou.plot_diagnostics(T=len(X),paths=600,seed=42)
 
