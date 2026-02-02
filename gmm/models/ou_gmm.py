@@ -51,7 +51,6 @@ class OU_GMM(BaseEstimator):
             print(f"theta = {th:.6f}")
             print(f"sigma = {s:.6f}")
             print(f"J-stat = {self.jstat_:.6e}")
-
         return self
 
     def fitted_model(self, X0):
