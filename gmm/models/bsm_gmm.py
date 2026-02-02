@@ -49,7 +49,6 @@ class BSM_GMM_estimator(BaseEstimator):
         return self._moments(sigma, data).mean(axis=0)
 
     def fit(self, data):
-
         def obj_1(sigma_guess, data):
             gbar = self._gbar(sigma_guess, data)
             return gbar**2
