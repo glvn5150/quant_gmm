@@ -4,9 +4,6 @@ import yfinance as yf
 from gmm.base_models.general_ou import OU
 from gmm.models.ou_gmm import OU_GMM
 
-# -------------------------------------------------
-# Download equity data
-# -------------------------------------------------
 tickers = """ADRO.JK ANTM.JK ASII.JK BBCA.JK BBNI.JK BBRI.JK BBTN.JK BMRI.JK
 BRPT.JK GGRM.JK
 CPIN.JK EMTK.JK EXCL.JK ICBP.JK INCO.JK INDF.JK INKP.JK KLBF.JK
