@@ -3,21 +3,26 @@ from scipy.optimize import minimize
 from sklearn.base import BaseEstimator
 
 class ForeignDomestic_GMM(BaseEstimator):
-    def __init__(self, r, rf, dt=1/252, verbose=False):
+    def __init__(self, r, rf, dt=1/252, verbose=False, instruments=None):
         self.r = r
         self.rf = rf
         self.dt = dt
         self.verbose = verbose
+        self.Z = instruments
         self.params_ = None
         self.jstat_ = None
 
     def _moments(self, params, logS, logQ):
         alpha, gamma, sigma1, sigma2 = params
-        m1 = logS.mean() - alpha * self.dt
-        m2 = logQ.mean() - (self.r - self.rf + gamma) * self.dt
-        m3 = logS.var() - sigma1**2 * self.dt
-        m4 = logQ.var() - sigma2**2 * self.dt
-        return np.array([m1, m2, m3, m4])
+        dS, dQ = logS, logQ
+        m1 = dS - alpha * self.dt
+        m2 = dQ - (self.r - self.rf + gamma) * self.dt
+        m3 = dS**2 - sigma1**2 * self.dt
+        m4 = dQ**2 - sigma2**2 * self.dt
+        G = np.column_stack([m1,m2,m3,m4])
+        if self.Z is not None:
+            G = G * self.Z
+        return G.mean(axis=0)
 
     def fit_gmm(self,S_series,Q_series,x0=(0.0, 0.0, 0.2, 0.2)):
         logS = np.log(S_series / S_series.shift(1)).dropna().values
