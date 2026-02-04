@@ -21,7 +21,7 @@ class ForeignDomestic_GMM(BaseEstimator):
         m4 = dQ**2 - sigma2**2 * self.dt
         G = np.column_stack([m1,m2,m3,m4])
         if self.Z is not None:
-            G = G * self.Z
+            G = G * self.Z[:,None]
         return G.mean(axis=0)
 
     def fit_gmm(self,S_series,Q_series,x0=(0.0, 0.0, 0.2, 0.2)):
