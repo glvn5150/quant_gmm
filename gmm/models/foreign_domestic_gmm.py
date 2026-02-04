@@ -28,7 +28,7 @@ class ForeignDomestic_GMM(BaseEstimator):
         logS = np.log(S_series / S_series.shift(1)).dropna().values
         logQ = np.log(Q_series / Q_series.shift(1)).dropna().values
         def objective(p):
-            g = self._moments(p, logS, logQ)
+            g = np.asarray(self._moments(p,logS,logQ)).ravel()
             return g @ g
         res = minimize(objective,x0=np.asarray(x0),method="BFGS")
         if not res.success:
