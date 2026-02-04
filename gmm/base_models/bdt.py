@@ -3,7 +3,6 @@ from scipy import optimize as opt
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 #---Tree---
 class Vertex:
     def __init__(self, t: int, i: int, r: float = None):

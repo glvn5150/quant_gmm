@@ -17,7 +17,6 @@ class ForeignDomestic_GMM(BaseEstimator):
         m2 = logQ.mean() - (self.r - self.rf + gamma) * self.dt
         m3 = logS.var() - sigma1**2 * self.dt
         m4 = logQ.var() - sigma2**2 * self.dt
-
         return np.array([m1, m2, m3, m4])
 
     def fit_gmm(self,S_series,Q_series,x0=(0.0, 0.0, 0.2, 0.2)):

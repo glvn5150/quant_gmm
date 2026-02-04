@@ -26,15 +26,4 @@ model_gmm = fm_gmm(r=r, rf=rf, dt=1/252, verbose=True)
 params = model_gmm.fit_gmm(S_series=df["IDR=X"], Q_series=df["EURUSD=X"])
 call = model.Garman_Kohlage_call(rf, r, sigma2, Q0, K, True)
 print(call)
-model.plot_forex_analysis(
-    S0=S0,
-    Q0=Q0,
-    r=r,
-    rf=rf,
-    gamma=gamma,
-    alpha=alpha,
-    sigma1=sigma1,
-    sigma2=sigma2,
-    rho=rho
-)
-
+model.plot_forex_analysis(S0=S0,Q0=Q0,r=r,rf=rf,gamma=gamma,alpha=alpha,sigma1=sigma1,sigma2=sigma2,rho=rho)
