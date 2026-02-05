@@ -40,9 +40,9 @@ GMM has 1-step GMM and 2-step GMM, where the matrix weight $W=I$ for the 1-step,
 ```math
 J = T \cdot \bar g_T(\hat\theta)^\top \hat W \bar g_T(\hat\theta)
 ```
-The J-stat has null-hypothesis of $H_0: \mathbb{E}[g_t(\theta_0)] = 0$, and converges to a Chi-Square type $J \;\xrightarrow{d}\; \chi^2_{q - p}$ where $q,p$ is the number of moments and paramters respectively. The Newey-West covariance is via $\hat S_{\text{NW}}=\sum_{k=-L}^L w_k \hat\Gamma_k$, where $\Gamma_k = \mathbb{E}[g_t g_{t-k}^\top]$ which adds robust to autocorrelation and heteroskedasticity. 
+The J-stat has null-hypothesis of $H_0: \mathbb{E}[g_t(\theta_0)] = 0$, and converges to a distribution $d$ of a Chi-Square type $J \xrightarrow{d} \chi^2_{q - p}$ where $q,p$ is the number of moments and paramters respectively. The Newey-West covariance is via $\hat S_{\text{NW}}=\sum_{k=-L}^L w_k \hat\Gamma_k$, where $\Gamma_k = \mathbb{E}[g_t g_{t-k}^\top]$ which adds robust to autocorrelation and heteroskedasticity. 
 The typical implementation for a GMM is thus in Python:
-```
+```python
 class GMMBase:
     def moments(self, params, data): #return the moments parameters 
         pass
@@ -59,6 +59,12 @@ class GMMBase:
         params2 = minimize(self.objective, params1, args=(W2, data))
         return params2
 ```
+## Example - Foreign Exchange Correlations
+The file [foreign_domestic_pricing](gmm/model_base/foreign_domestic_pricing.py) implements a forex model into financial data. The forex model uses a diffusion model of:
+```math
+\frac{dQ}{Q} = (r^f - r + \gamma) dt + \sigma dW_t
+```
+The [notebook]()
 
 # Books used and further reading:
 - Cochrane, J. H. (2005). Asset pricing (Rev. ed.). Princeton University Press.
