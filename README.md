@@ -12,7 +12,7 @@ The rep's models:
 - Linear SDF asset pricing models $\mathbb{E}[m_t R_{i,t} - 1] = 0$,
 - Forex models $dQ/Q = (r^f - r + \gamma) dt + \sigma dW_t$
 
-The rep has its limitations, by which it:
+The rep also has its limitations, by which it:
 - Moment conditions are hand-specified and model-dependent.
 - Weighting matrices rely on simple identity or HAC estimators.
 - Inference assumes standard asymptotic GMM conditions.
@@ -61,10 +61,34 @@ class GMMBase:
 ```
 ## Example - Foreign Exchange Correlations
 The file [foreign_domestic_pricing](gmm/model_base/foreign_domestic_pricing.py) implements a forex model into financial data. The forex model uses a diffusion model of:
-```math
-\frac{dQ}{Q} = (r^f - r + \gamma) dt + \sigma dW_t
+```math 
+\begin{aligned}
+d \log S_t = \alpha \, dt + \sigma_1 \, dW_t^S \\
+d \log Q_t = (r - r_f + \gamma)\, dt + \sigma_2 \, dW_t^Q
+\end{aligned}
 ```
-The [notebook]()
+where $\alpha$ is the domestic drift, $\gamma$ is the forex risk premium, $r - r_f$ is the carry term (I used real interest rates), $sigma_i$ as volatility, and $\rho = \mathrm{corr}(dW^S, dW^Q)$. The python file [foreign_domestic_pricing_gmm](gmm/model_base/foreign_domestic_pricing_gmm.py) elaborates the moments with $dX_t = \Delta \log X_t$ for $X \in (S,Q)$ and drift $\alpha = \mu_S - \tfrac{1}{2}\sigma_1^2$ and $\gamma = \mu_Q - \tfrac{1}{2}\sigma_2^2$ as:
+```math
+\begin{aligned}
+m_{1t} = dS_t - \alpha \Delta t \\
+m_{2t} = dQ_t - (r - r_f + \gamma)\Delta t \\
+m_{3t} = dS_t^2 - \sigma_1^2 \Delta t \\
+m_{4t} = dQ_t^2 - \sigma_2^2 \Delta t
+\end{aligned}
+```
+The GMM is thus stacked in a 4D array:
+```math
+g_t(\theta) =
+\begin{bmatrix}
+m_{1t} \\
+m_{2t} \\
+m_{3t} \\
+m_{4t}
+\end{bmatrix}
+\in \mathbb{R}^4
+```
+The python file has also includes instruments $Z$ for multi or cross-sectional implementation of different currencies (say analyzing the Dollar to other currencies that has ratio to the dollar like Euros, IDR, etc. and it's inverse), so that $\mathbb{E}\big[ Z_t \, m_t(\theta) \big] = 0$
+The notebook [ex2_global_fx.ipynb](ex2_global_fx.ipynb) contains the full code implementation. 
 
 # Books used and further reading:
 - Cochrane, J. H. (2005). Asset pricing (Rev. ed.). Princeton University Press.
