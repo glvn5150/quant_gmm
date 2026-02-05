@@ -3,8 +3,9 @@
 This rep is a personal project, for the applications of Generalized Methods of Moments, in the style of John Cochrane (2005) to financial data and models. The model stems from his book _Asset Pricing_, and this rep samples some well known diffusion models in finance and applied GMM methods to the moment statistics to those diffusion moments. This rep was inspired by my time in studying asset pricing , quantitative finance, and mathematical statistics in which I aggregated the codes into a python Import folder that can be used. The folder [GMM](gmm) makes each base models in the folder named [base_models](gmm/base_models) as python class as a GMM model of each of the models moments via the [models](gmm/models) folder. A simple test of the models has been implemented by the use of YahooFinance plugin in python in the folder [model_tests](gmm/model_tests). Example applications to empirical data are present in the jupyter notebooks with initials ex. in the [main directory](https://github.com/glvn5150/quant_gmm). The intentions of the model is thus, to have a unify GMM framework from sample models that has essential diagnostic plots for each model tested. 
 
 The rep's models:
-- General OU processes : $dx_t = \kappa(\theta - x_t) + \sigma dW_t$,
-- Vasicek : $dr_t = a(\theta - r_t)\,dt + \sigma \,dW_t$,
+- Geometric Brownian Motion : $dx_t/x_t = (\mu - \frac{1}{2} \sigma^2)dt + \sigma dW_t$,
+- General OU processes : $dx_t = \kappa(\theta - x_t)dt + \sigma dW_t$,
+- Vasicek : $dr_t = a(\theta - r_t)dt + \sigma \,dW_t$,
 - CIR : $dr_t = a(\theta - r_t)\,dt + \sigma \sqrt{r_t}\,dW_t$,
 - Hull–White $dr_{t}=[\theta (t)-ar_{t}]dt+\sigma dW_{t}$,
 - Black–Derman–Toy : $d \log r_t = (\theta_t + \frac{\sigma'}{\sigma} \log r_t) dt + \sigma dWt$,
