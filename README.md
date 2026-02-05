@@ -1,6 +1,6 @@
 # Quant GMM - 0.1
 ## Outline of Rep
-This rep is a personal project, for the applications of Generalized Methods of Moments, in the style of John Cochrane to financial data and models. The model stems from his book _Asset Pricing_, and this rep samples some well known diffusion models in finance and applied GMM methods to the moment statistics to those diffusion moments. This rep was inspired by my time in studying asset pricing , quantitative finance, and mathematical statistics in which I aggregated the codes into a python Import folder that can be used. The folder [GMM](gmm) makes each base models in the folder named [base_models](gmm/base_models) as python class as a GMM model of each of the models moments via the [models](gmm/models) folder. A simple test of the models has been implemented by the use of YahooFinance plugin in python in the folder [model_tests](gmm/model_tests). Example applications to empirical data are present in the jupyter notebooks with initials ex. in the [main directory](https://github.com/glvn5150/quant_gmm). The intentions of the model is thus, to have a unify GMM framework from sample models that has essential diagnostic plots for each model tested. 
+This rep is a personal project, for the applications of Generalized Methods of Moments, in the style of John Cochrane (2005) to financial data and models. The model stems from his book _Asset Pricing_, and this rep samples some well known diffusion models in finance and applied GMM methods to the moment statistics to those diffusion moments. This rep was inspired by my time in studying asset pricing , quantitative finance, and mathematical statistics in which I aggregated the codes into a python Import folder that can be used. The folder [GMM](gmm) makes each base models in the folder named [base_models](gmm/base_models) as python class as a GMM model of each of the models moments via the [models](gmm/models) folder. A simple test of the models has been implemented by the use of YahooFinance plugin in python in the folder [model_tests](gmm/model_tests). Example applications to empirical data are present in the jupyter notebooks with initials ex. in the [main directory](https://github.com/glvn5150/quant_gmm). The intentions of the model is thus, to have a unify GMM framework from sample models that has essential diagnostic plots for each model tested. 
 
 The rep's models:
 - General OU processes : $dx_t = \kappa(\theta - x_t) + \sigma dW_t$,
@@ -76,9 +76,10 @@ The moment condition is:
 ```math
 g_1 = \bar{dX} - \kappa(\theta - \bar X)\,dt = 0
 ```
-The figure below shows the plot of both indexes, as well when the OU is modelled as a spread. 
+The figure below shows the plot of both indexes, as well when the OU is modelled as a spread. As the mean reversion gets bigger, the markets integrated, arbitrage effective in which the factor is akin to a half-life of $\ln2 / \kappa$. The smaller the mean reversion, the more valuation gaps are persistent. The GMM and raw model is akin although one is slightly bigger. The equilibirum is thus via $\theta$ where more than 0, Indonesia structurally trades at premiums.
 
-
+<img src="images/s&p_jci_plot.jpeg" alt="Project Screenshot" width="400" />
+<img src="images/spread_ou.jpeg" alt="Project Screenshot" width="400" />
 
 ## Example - Foreign Exchange Correlations
 The file [foreign_domestic_pricing](gmm/model_base/foreign_domestic_pricing.py) implements a forex model into financial data. The forex model uses a diffusion model of:
