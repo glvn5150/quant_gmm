@@ -33,14 +33,9 @@ print("\n=== OLS Vasicek calibration ===")
 for k, v in ols_params.items():
     print(f"{k:>12}: {v:.4f}")
 
-gmm = VasicekHoLee_GMM(
-    maturities=maturities,
-    spot_rates=spot_yields,
-    model_type="vasicek"
-)
+gmm = VasicekHoLee_GMM(maturities=maturities,spot_rates=spot_yields,model_type="vasicek")
 
 gmm.fit(estimate_sigma=True)
-
 print("\n=== GMM Vasicek–Ho–Lee calibration ===")
 print(f"{'theta_hat':>12}: {gmm.theta_hat:.6f}")
 print(f"{'sigma_hat':>12}: {gmm.sigma_hat:.6f}")
@@ -55,33 +50,16 @@ for T in tenors:
     y_ols.append(-np.log(P) / T)
 
 # gmm_implied_curve
-vas_gmm = Vasicek_HoLee(
-    T=30,
-    N=300,
-    r0=r0,
-    theta=gmm.theta_hat,
-    sigma=gmm.sigma_hat
-)
-
+vas_gmm = Vasicek_HoLee(T=30,N=300,r0=r0,theta=gmm.theta_hat,sigma=gmm.sigma_hat)
 y_gmm = []
 for T in tenors:
     A, B = vas_gmm.get_A_B(0.0, T, model="vasicek")
     P = A * np.exp(-B * r0)
     y_gmm.append(-np.log(P) / T)
 
-df_curves = pd.DataFrame({
-    "tenor": tenors,
-    "ols": y_ols,
-    "gmm": y_gmm
-})
+df_curves = pd.DataFrame({"tenor": tenors,"ols": y_ols,"gmm": y_gmm})
 
 print("\n=== Curve diagnostics ===")
-print("mean |ols − gmm|:",
-      np.mean(np.abs(df_curves["ols"] - df_curves["gmm"])))
-
-print("Max  |ols − gmm|:",
-      np.max(np.abs(df_curves["ols"] - df_curves["gmm"])))
-
-vas_ols.plot_combined_view(
-    spots_df=spot_rates_series
-)
+print("mean |ols − gmm|:",np.mean(np.abs(df_curves["ols"] - df_curves["gmm"])))
+print("Max  |ols − gmm|:",np.max(np.abs(df_curves["ols"] - df_curves["gmm"])))
+vas_ols.plot_combined_view(spots_df=spot_rates_series)

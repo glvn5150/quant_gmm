@@ -37,12 +37,10 @@ class Vasicek_HoLee:
         tau = T_mat - t
         if tau <= 0: return 1.0,0.0
         kappa_q,theta_q = self.risk_neutral_params()
-
         if model.lower() == "ho-lee":
             B = tau
             ln_A = (self.theta * (tau ** 2) / 2) - (self.sigma ** 2 * (tau ** 3) / 6)
             return exp(ln_A),B
-
         elif model.lower() == "vasicek":
             B = (1 - exp(-self.a * tau)) / self.a
             term1 = (B - tau) * (self.a ** 2 * theta_q - self.sigma ** 2 / 2) / (self.a ** 2)
