@@ -22,7 +22,6 @@ class OU_GMM(BaseEstimator):
         # theoretical moments
         phi = np.exp(-kappa * self.dt)
         var_theory = sigma**2 * (1 - phi**2) / (2 * kappa)
-
         g1 = m1 - kappa * (theta - Xlag.mean()) * self.dt
         g2 = m2 - var_theory
         g3 = m3 + kappa * Xlag.var() * self.dt
