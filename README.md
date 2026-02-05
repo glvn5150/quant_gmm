@@ -87,8 +87,32 @@ m_{4t}
 \end{bmatrix}
 \in \mathbb{R}^4
 ```
-The python file has also includes instruments $Z$ for multi or cross-sectional implementation of different currencies (say analyzing the Dollar to other currencies that has ratio to the dollar like Euros, IDR, etc. and it's inverse), so that $\mathbb{E}\big[ Z_t \, m_t(\theta) \big] = 0$
-The notebook [ex2_global_fx.ipynb](ex2_global_fx.ipynb) contains the full code implementation. 
+The outline code has:
+```python
+class FX_GMM:
+    def moments(self, params, logS, logQ):
+        alpha, gamma, sigma1, sigma2 = params
+        g1 = logS - alpha*dt
+        g2 = logQ - (r - rf + gamma)*dt
+        g3 = logS**2 - sigma1**2*dt
+        g4 = logQ**2 - sigma2**2*dt
+        return [g1, g2, g3, g4]
+```
+The python file has also includes instruments $Z$ for multi or cross-sectional implementation of different currencies (say analyzing the Dollar to other currencies that has ratio to the dollar like Euros, IDR, etc. and it's inverse), so that $\mathbb{E}\big[ Z_t \, m_t(\theta) \big] = 0$. The notebook [ex2_global_fx.ipynb](ex2_global_fx.ipynb) contains the full code implementation, in which i normalized the values to $\tilde X_t = X_t / X_0$ and thus \log \tilde X_t = (\mu_X - \tfrac12\sigma_X^2)t + \sigma_X W_t.
+
+This figure below implements it as a simple demonstration without GMM how the base code works, in which the instruments are USD/JAP and EUR/USD. The DMM and FMM follows Shreeve (2004) in Chapter 9, where he elaborates the mechanics and math behind the domestic and foreign money market under numeraire, in which I implemented it instead of to stocks but to directly to Forex. 
+<img src="images/usd_v_japan_v_eur.jpeg" alt="Project Screenshot" width="800" />
+
+This figure and table below is the results of implementation to multi-currencies. Although the data is using moments that are highly correlated (USD/AUD and AUD/USD) for example, and not adding "new" information for the test to fail on, The GMM method successfully estimated parameters such that the average of the moment conditions over the entire period is statistically not that different to zero, and by such The J-stat in the samples are really small as a result. The figure shows the raw moments implemented in which it "explodes" for some currencies, while the moments after the GMM is normalized around one, suggesting the GMM estimation has found parameters that make the moments behave as white noise (unpredictable, with a constant average of zero in expectation). 
+
+<img src="images/multi_currency.jpeg" alt="Project Screenshot" width="800" />
+
+| pair | foreign | rf | gamma_sample | gamma_gmm | sigma2 | jstat |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| AUDUSD Curncy | AUD | 0.0150 | -0.019289 | -0.020010 | 0.087139 | 6.276963e-07 |
+| BRLUSD Curncy | BRL | 0.0450 | -0.002360 | 0.027947 | 0.118605 | 5.657920e-07 |
+| CADUSD Curncy | CAD | 0.0125 | -0.011452 | -0.016904 | 0.054414 | 2.031796e-07 |
+
 
 # Books used and further reading:
 - Cochrane, J. H. (2005). Asset pricing (Rev. ed.). Princeton University Press.
