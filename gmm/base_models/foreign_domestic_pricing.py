@@ -6,7 +6,7 @@ import pandas as pd
 import statsmodels.api as sm
 
 class ForexModel:
-    '''Mathematics orginated from Shreeve Volume II'''
+    '''Simple FOREX model, where the math orginated from Shreeve Volume II'''
     #define time variables
     def __init__(self, T=1, N=1000):
         # only time-related setup in __init__
