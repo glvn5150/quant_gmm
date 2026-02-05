@@ -1,6 +1,6 @@
 # Quant GMM - 0.1
 ## Outline of Rep
-This rep is a personal project, for the applications of Generalized Methods of Moments, in the style of John Cochrane to financial data and models. The model stems from his book _Asset Pricing_, and this rep samples some well known diffusion models in finance and applied GMM methods to the moment statistics to those diffusion moments. This rep was inspired by my time studying asset pricing and quantitative finance, in which I aggregated the codes into a python Import folder that can be used. The folder [GMM](gmm) makes each base models in the folder named [base_models](gmm/base_models) as python class as a GMM model of each of the models moments via the [models](gmm/models) folder. A simple test of the models has been implemented by the use of YahooFinance plugin in python in the folder [model_tests](gmm/model_tests). Example applications to empirical data are present in the jupyter notebooks with initials ex. in the [main directory](https://github.com/glvn5150/quant_gmm). The intentions of the model is thus, to have a unify GMM framework from sample models that has essential diagnostic plots for each model tested. 
+This rep is a personal project, for the applications of Generalized Methods of Moments, in the style of John Cochrane to financial data and models. The model stems from his book _Asset Pricing_, and this rep samples some well known diffusion models in finance and applied GMM methods to the moment statistics to those diffusion moments. This rep was inspired by my time in studying asset pricing , quantitative finance, and mathematical statistics in which I aggregated the codes into a python Import folder that can be used. The folder [GMM](gmm) makes each base models in the folder named [base_models](gmm/base_models) as python class as a GMM model of each of the models moments via the [models](gmm/models) folder. A simple test of the models has been implemented by the use of YahooFinance plugin in python in the folder [model_tests](gmm/model_tests). Example applications to empirical data are present in the jupyter notebooks with initials ex. in the [main directory](https://github.com/glvn5150/quant_gmm). The intentions of the model is thus, to have a unify GMM framework from sample models that has essential diagnostic plots for each model tested. 
 
 The rep's models:
 - General OU processes : $dx_t = \kappa(\theta - x_t) + \sigma dW_t$,
@@ -59,6 +59,27 @@ class GMMBase:
         params2 = minimize(self.objective, params1, args=(W2, data))
         return params2
 ```
+## Example - Stock Market Correlations
+Simple illustration of a model is to consider say the spread between two equity index (or any asset types but let's use these for simplicity) such as the JCI and S&P. Basically we have moments according to asset pricing, with parameter $\beta$, we can formulate:
+```math 
+x_t \;=\; \log(\text{JCI}_t) \;-\; \beta\,\log(\text{S\&amp;P}_t)
+```
+Continous time spread can be model using OU for mean-reverting aspects (for example), as:
+```math 
+dx_t = \kappa(\theta - x_t)\,dt \;+\; \sigma\,dW_t
+```
+This has the formulation of $\text{JCI}_t \approx \beta\,\text{S\&amp;P}_t \times e^{x_t}$, in which the S&P is the global factor, and the $x_t% is the global deviation between the JCI and S$P.This corresponds to a form $\Delta x_t = -\kappa x_{t-1} + \kappa\theta + \varepsilon_t$, in which is akin to a VECM with one cointegrating vector. The GMM theoretically, means:
+```math
+\mathbb{E}[dX_t] = \kappa(\theta - \mathbb{E}[X_t])\,dt
+```
+The moment condition is:
+```math
+g_1 = \bar{dX} - \kappa(\theta - \bar X)\,dt = 0
+```
+The figure below shows the plot of both indexes, as well when the OU is modelled as a spread. 
+
+
+
 ## Example - Foreign Exchange Correlations
 The file [foreign_domestic_pricing](gmm/model_base/foreign_domestic_pricing.py) implements a forex model into financial data. The forex model uses a diffusion model of:
 ```math 
@@ -98,7 +119,7 @@ class FX_GMM:
         g4 = logQ**2 - sigma2**2*dt
         return [g1, g2, g3, g4]
 ```
-The python file has also includes instruments $Z$ for multi or cross-sectional implementation of different currencies (say analyzing the Dollar to other currencies that has ratio to the dollar like Euros, IDR, etc. and it's inverse), so that $\mathbb{E}\big[ Z_t \, m_t(\theta) \big] = 0$. The notebook [ex2_global_fx.ipynb](ex2_global_fx.ipynb) contains the full code implementation, in which i normalized the values to $\tilde X_t = X_t / X_0$ and thus \log \tilde X_t = (\mu_X - \tfrac12\sigma_X^2)t + \sigma_X W_t.
+The python file has also includes instruments $Z$ for multi or cross-sectional implementation of different currencies (say analyzing the Dollar to other currencies that has ratio to the dollar like Euros, IDR, etc. and it's inverse), so that $\mathbb{E}\big[ Z_t \, m_t(\theta) \big] = 0$. The notebook [ex2_global_fx.ipynb](ex2_global_fx.ipynb) contains the full code implementation, in which I normalized the values to $ \tilde{X}_t = X_t / X_0$ and thus $\log \tilde{X}_t = (\mu_X - \tfrac12\sigma_X^2)t + \sigma_X W_t$.
 
 This figure below implements it as a simple demonstration without GMM how the base code works, in which the instruments are USD/JAP and EUR/USD. The DMM and FMM follows Shreeve (2004) in Chapter 9, where he elaborates the mechanics and math behind the domestic and foreign money market under numeraire, in which I implemented it instead of to stocks but to directly to Forex. 
 <img src="images/usd_v_japan_v_eur.jpeg" alt="Project Screenshot" width="800" />
@@ -112,6 +133,7 @@ This figure and table below is the results of implementation to multi-currencies
 | AUDUSD Curncy | AUD | 0.0150 | -0.019289 | -0.020010 | 0.087139 | 6.276963e-07 |
 | BRLUSD Curncy | BRL | 0.0450 | -0.002360 | 0.027947 | 0.118605 | 5.657920e-07 |
 | CADUSD Curncy | CAD | 0.0125 | -0.011452 | -0.016904 | 0.054414 | 2.031796e-07 |
+
 
 
 # Books used and further reading:
