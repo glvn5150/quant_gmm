@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 from gmm.base_models.vasicek_ho_lee import Vasicek_HoLee
-from gmm.models.vasicek_ho_leee_gmm import VasicekHoLee_GMM
+from gmm.models.vasicek_ho_lee_gmm import VasicekHoLee_GMM
 
 tickers_map = {"^IRX": 0.25,"^FVX": 5.0,"^TNX": 10.0,"^TYX": 30.0}
 
