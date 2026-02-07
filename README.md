@@ -60,6 +60,12 @@ class GMMBase:
         params2 = minimize(self.objective, params1, args=(W2, data))
         return params2
 ```
+## Basic Usage and Simulations
+In the [example file](ex1_sample_application_and_simulation.ipynb), basics of geometric brownian motion, vasicek, and GMM is displayed. The figure below is the extracted images from the file. For the GMM for example, the synthetic data using simulations is more stable, but when optimized using generalized methods of moments, the mean and sigma becomes widely different. The change in mean and volatility has more oscilations 
+<img src="images/gbm_true_v_naive.png" alt="Project Screenshot" width="400" />
+
+The vasicek also has this property, in which the mean reversion and the volatility has more frequency oscillations than the initial, in which the initial is more stable than the GMM one. 
+<img src="images/vasicek_true_v_naive.png" alt="Project Screenshot" width="400" />
 ## Example - Stock Market Correlations
 Simple illustration of a model is to consider say the spread between two equity index (or any asset types but let's use these for simplicity) such as the JCI and S&P. Basically we have moments according to asset pricing, with parameter $\beta$, we can formulate:
 ```math 
